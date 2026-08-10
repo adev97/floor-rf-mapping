@@ -19,7 +19,7 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%% MONITOR INFORMATION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 monitorInfo.screenNumber = 1; 
-monitorInfo.screenDistcm = 3.5; % distance of eyes from screen
+monitorInfo.screenDistcm = 3; % distance of eyes from screen
 monitorInfo.screenSizecmX = 54.5; % height of monitor   
 monitorInfo.screenSizecmY = 30.2; % width of monitor        
 monitorInfo.screenSizeDegX = 2*atan(monitorInfo.screenSizecmX/2/...
