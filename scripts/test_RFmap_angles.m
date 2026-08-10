@@ -2,56 +2,212 @@ function test_RFmap_angles
 
 AssertOpenGL;
 
-% Load all monitor information
+%% Load monitor information
 monitorInformation;
 
-% Use the monitor specified in monitorInformation
 screenNumber = monitorInfo.screenNumber;
 
-% Open screen
+%% Monitor dimensions
+screenWidth_cm  = monitorInfo.screenSizecmX;
+screenHeight_cm = monitorInfo.screenSizecmY;
+
+screenWidth_pix  = monitorInfo.screenSizePixX;
+screenHeight_pix = monitorInfo.screenSizePixY;
+
+%% Mouse geometry
+mouseDistance_cm = monitorInfo.screenDistcm;
+
+% Mouse projection on monitor
+% 24.5 cm from RIGHT edge
+mouseX_cm = screenWidth_cm - 24.5;
+
+% 14 cm from BOTTOM
+mouseY_cm = 14.0;
+
+%% cm -> pixels
+pixPerCmX = screenWidth_pix / screenWidth_cm;
+pixPerCmY = screenHeight_pix / screenHeight_cm;
+
+%% Mouse projection in pixels
+mouseX_pix = mouseX_cm * pixPerCmX;
+
+mouseY_pix = screenHeight_pix - ...
+    mouseY_cm * pixPerCmY;
+
+%% Open Psychtoolbox
 gray = 127;
-[w, screenRect] = PsychImaging('OpenWindow', screenNumber, gray);
+
+[w, screenRect] = PsychImaging( ...
+    'OpenWindow', screenNumber, gray);
 
 HideCursor;
 
-% Pixel/cm conversion from monitorInformation
-pixPerCmX = monitorInfo.screenSizePixX / monitorInfo.screenSizecmX;
-pixPerCmY = monitorInfo.screenSizePixY / monitorInfo.screenSizecmY;
+%% ============================================================
+%  DRAW MOUSE PROJECTION
+% =============================================================
 
-% Mouse-head projection on monitor
-mouseX_cm = 30.0;
-mouseY_cm = 15.0;
+dotSize = 12;
 
-mouseX_pix = mouseX_cm * pixPerCmX;
-mouseY_pix = monitorInfo.screenSizePixY - ...
-             mouseY_cm * pixPerCmY;
+Screen('FillOval', w, [0 255 0], ...
+    [mouseX_pix-dotSize/2, ...
+     mouseY_pix-dotSize/2, ...
+     mouseX_pix+dotSize/2, ...
+     mouseY_pix+dotSize/2]);
 
-% Test angles
-testAngles = [0 45 70];
 
-for i = 1:length(testAngles)
+%% ============================================================
+%  DRAW 0-DEGREE REFERENCE LINE
+% =============================================================
 
-    theta = testAngles(i);
+Screen('DrawLine', w, [100 100 100], ...
+    mouseX_pix, 0, ...
+    mouseX_pix, screenHeight_pix, 3);
 
-    % Distance along monitor from the head's projection
-    r_cm = monitorInfo.screenDistcm * tand(theta);
 
-    x_cm = mouseX_cm + r_cm * sind(theta);
-    y_cm = mouseY_cm + r_cm * cosd(theta);
+%% ============================================================
+%  FAN ANGLES
+% =============================================================
 
-    x_pix = x_cm * pixPerCmX;
-    y_pix = monitorInfo.screenSizePixY - y_cm * pixPerCmY;
+angleStep = 10;
 
-    Screen('FillOval', w, [255 255 255], ...
-        [x_pix-5 y_pix-5 x_pix+5 y_pix+5]);
+% 0 degrees = straight UP
+%
+% Positive = clockwise/right
+% Negative = counterclockwise/left
+
+fanMin = -120;
+fanMax = 120;
+
+fanAngles = fanMin:angleStep:fanMax;
+
+
+%% ============================================================
+%  CALCULATE RAY INTERSECTIONS WITH SCREEN
+% =============================================================
+
+for i = 1:length(fanAngles)
+
+    theta = fanAngles(i);
+
+    % ---------------------------------------------------------
+    % Ray direction
+    %
+    % 0 degrees = straight upward
+    %
+    % x component = sin(theta)
+    % y component = cos(theta)
+    % ---------------------------------------------------------
+
+    dx = cosd(theta);
+    dy = -sind(theta);
+
+    % ---------------------------------------------------------
+    % Find where the ray intersects the monitor rectangle.
+    %
+    % Parametric ray:
+    %
+    % x = mouseX_cm + t * mouseDistance_cm * dx
+    % y = mouseY_cm + t * mouseDistance_cm * dy
+    %
+    % We find the first intersection with the monitor boundary.
+    % ---------------------------------------------------------
+
+    intersections = [];
+
+    % Right edge
+    if dx > 0
+        t = (screenWidth_cm - mouseX_cm) / ...
+            (mouseDistance_cm * dx);
+
+        y = mouseY_cm + ...
+            t * mouseDistance_cm * dy;
+
+        if y >= 0 && y <= screenHeight_cm
+            intersections(end+1,:) = ...
+                [screenWidth_cm, y];
+        end
+    end
+
+    % Left edge
+    if dx < 0
+        t = (0 - mouseX_cm) / ...
+            (mouseDistance_cm * dx);
+
+        y = mouseY_cm + ...
+            t * mouseDistance_cm * dy;
+
+        if y >= 0 && y <= screenHeight_cm
+            intersections(end+1,:) = ...
+                [0, y];
+        end
+    end
+
+    % Top edge
+    if dy > 0
+        t = (screenHeight_cm - mouseY_cm) / ...
+            (mouseDistance_cm * dy);
+
+        x = mouseX_cm + ...
+            t * mouseDistance_cm * dx;
+
+        if x >= 0 && x <= screenWidth_cm
+            intersections(end+1,:) = ...
+                [x, screenHeight_cm];
+        end
+    end
+
+    % Bottom edge
+    if dy < 0
+        t = (0 - mouseY_cm) / ...
+            (mouseDistance_cm * dy);
+
+        x = mouseX_cm + ...
+            t * mouseDistance_cm * dx;
+
+        if x >= 0 && x <= screenWidth_cm
+            intersections(end+1,:) = ...
+                [x, 0];
+        end
+    end
+
+    % ---------------------------------------------------------
+    % Draw the ray if it intersects the monitor
+    % ---------------------------------------------------------
+
+    if ~isempty(intersections)
+
+        hitX_cm = intersections(1,1);
+        hitY_cm = intersections(1,2);
+
+        hitX_pix = hitX_cm * pixPerCmX;
+
+        hitY_pix = screenHeight_pix - ...
+            hitY_cm * pixPerCmY;
+
+        Screen('DrawLine', w, [255 255 255], ...
+            mouseX_pix, mouseY_pix, ...
+            hitX_pix, hitY_pix, 2);
+
+        % Draw endpoint
+        Screen('FillOval', w, [255 255 255], ...
+            [hitX_pix-4, hitY_pix-4, ...
+             hitX_pix+4, hitY_pix+4]);
+
+    end
+
 end
 
-% Mark head projection
-Screen('FillOval', w, [0 255 0], ...
-    [mouseX_pix-6 mouseY_pix-6 ...
-     mouseX_pix+6 mouseY_pix+6]);
+
+%% ============================================================
+%  DISPLAY
+% =============================================================
 
 Screen('Flip', w);
+
+
+%% ============================================================
+%  WAIT
+% =============================================================
 
 KbStrokeWait;
 
@@ -59,3 +215,4 @@ sca;
 ShowCursor;
 
 end
+
