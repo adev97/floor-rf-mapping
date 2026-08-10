@@ -9,12 +9,16 @@ monitorInformation;
 
 % Azimuth: -120 to +120 deg in 10 deg sectors -> 24 sectors, given as
 % bin INNER edges -120:10:110.
+
 % Eccentricity: 0 to 80 deg in 10 deg sectors -> 8 sectors, given as
-% bin INNER edges 0:10:70.
+% bin INNER edges 0:10:70. (10, 70 means 80 deg total. 10, 60 would mean 70
+% deg total
+
 % Row order matters: Azimuth, then Eccentricity, then Luminance LAST,
 % so Luminance is the fastest-varying parameter. trialStruct_RFmapFast's
 % randomization for stimType 'Receptive Field Mapping' relies on that
 % ordering to avoid two consecutive trials landing on the same sector.
+
 table = {'Sector Azimuth (deg)', -120, 10, 110;...
          'Sector Eccentricity (deg)', 0, 10, 70;...
          'Sector Luminance (binary)', 0, 1, 1;...
