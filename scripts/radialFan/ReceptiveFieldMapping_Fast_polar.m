@@ -1,7 +1,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function ReceptiveFieldMapping_Fast_polar(trials)
-% RECEPTIVEFIELDMAPPING_FAST_POLAR draws black/white polar "pie-slice"
-% sector stimuli (azimuth x eccentricity), defined relative to the mouse
+% draws black/white polar "pie-slice" sector stimuli (azimuth x 
+% eccentricity), defined relative to the mouse
 % head position, using the geometry validated in
 % test_RFmap_80deg_geometry.m.
 %
