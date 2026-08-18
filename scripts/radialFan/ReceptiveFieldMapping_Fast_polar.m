@@ -41,9 +41,7 @@ monitorInformation;
 %%%%%%%%%%%%%%%%%%%%%%% MOUSE HEAD PROJECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Mouse offset coordinates now live in monitorInformation.m as
 % monitorInfo.mouseOffsetXcm / monitorInfo.mouseOffsetYcm, so this file
-% and test_RFmap_80deg_geometry.m can't drift apart. If you named these
-% fields something else in monitorInformation.m, update the two lines
-% below to match.
+% and test_RFmap_80deg_geometry.m can't drift apart. 
 mouseDistance_cm        = monitorInfo.screenDistcm;   % mouse head - screen
 mouseOffsetFromRight_cm = monitorInfo.mouseOffsetXcm;
 mouseOffsetFromBottom_cm = monitorInfo.mouseOffsetYcm;
@@ -79,8 +77,7 @@ nArcPoints = 20;
 % Only nAz x nEcc unique sector shapes exist, no matter how many repeats
 % are in the trial list -- build each exactly once, indexed by
 % [azimuthBinIndex, eccentricityBinIndex], and look each trial's shape up
-% instead of recomputing/duplicating it. This all happens before any PTB
-% window is open.
+% instead of recomputing/duplicating it. 
 sectorVertsGrid = cell(nAz, nEcc);
 for a = 1:nAz
     azInner = uniqueAz(a);
@@ -128,9 +125,8 @@ try
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%% MAIN TRIAL LOOP %%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Nothing computationally heavy happens between stimInitScreen's last
-% flip and this first real trial-loop flip -- all geometry was already
-% built above, before the window even opened.
+% geometry has already been built
+
     nTrials  = numel(trials);
     exitLoop = 0;
     vbl = Screen('Flip', w);
