@@ -26,16 +26,16 @@ table = {'Sector Azimuth (deg)', -120, 10, 110;...
          'Blank', 0, [], [];...
          'Randomize', 1, [], [];...
          'Interleave', 0, [], [];...
-         'Repeats', 49, [], [];... % TESTING WITH TWO REPEATS, EXPERIMENT WILL HAVE 1 + 49 REPEATS
+         'Repeats', 1, [], [];... % TESTING WITH TWO REPEATS, EXPERIMENT WILL HAVE 1 + 49 REPEATS
          'Initialization Screen (s)', 5, [], []};
 
 stimType = 'Receptive Field Mapping';
-tag = 'Run01'; %#ok<NASGU>
+tag = 'ADm001'; %#ok<NASGU> % change for which mouse it is (m - male, f - female)
 
 trials = trialStruct_RFmapFast(stimType, table); % unchanged from Elissa's script
 ReceptiveFieldMapping_Fast_polar(trials);
 
-% savename = 'RFmap_Fast_polar_100ms';
-% trialStructSave_EB(trials, savename, tag);
+savename = 'RFmap_Fast_polar_100ms';
+trialStructSave(trials, savename, tag);
 
 end
