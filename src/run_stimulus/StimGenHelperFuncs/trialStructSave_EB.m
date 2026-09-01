@@ -77,7 +77,8 @@ if any(strcmp(target,names))
           throw(ME);
     end
 % If the file is not present in the directory then proceed with save
-else save(fullfile(saveDir,target),'trials');
+else 
+    save(fullfile(saveDir,target),'trials');
      %save(fullfile(backupSaveDir,target),'trials');
 end
 
