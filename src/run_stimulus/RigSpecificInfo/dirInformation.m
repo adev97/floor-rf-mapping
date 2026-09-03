@@ -20,8 +20,8 @@
 % be expanded later to do more.
 %
 
-%Testing save location (comment out in your code)
-dirInfo.DaqPCDataLoc = 'C:\Stimulus_Data\Mouse11';
+% save location
+dirInfo.DaqPCDataLoc = 'C:\Users\urs2027\Documents\Projects\data\stimulus';
 
 % shared stimuli folder on DAQ PC
 %dirInfo.DaqPCDataLoc = 'S:\';
