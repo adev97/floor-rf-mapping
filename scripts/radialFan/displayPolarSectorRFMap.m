@@ -1,5 +1,5 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function ReceptiveFieldMapping_Fast_polar(trials)
+function displayPolarSectorRFMap(trials)
 % draws black/white polar "pie-slice" sector stimuli (azimuth x 
 % eccentricity), defined relative to the mouse
 % head position, using the geometry validated in
@@ -36,13 +36,13 @@ function ReceptiveFieldMapping_Fast_polar(trials)
 % and the geometry in test_RFmap_80deg_geometry.m.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-monitorInformation;
+monitorInfo = getMonitorInformation();
 
 %%%%%%%%%%%%%%%%%%%%%%% MOUSE HEAD PROJECTION %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Mouse offset coordinates now live in monitorInformation.m as
+% Mouse offset coordinates live in getMonitorInformation.m as
 % monitorInfo.mouseOffsetXcm / monitorInfo.mouseOffsetYcm, so this file
 % and test_RFmap_80deg_geometry.m can't drift apart. If you named these
-% fields something else in monitorInformation.m, update the two lines
+% fields something else in getMonitorInformation.m, update the two lines
 % below to match.
 mouseDistance_cm        = monitorInfo.screenDistcm;   % mouse head - screen
 mouseOffsetFromRight_cm = monitorInfo.mouseOffsetXcm;
