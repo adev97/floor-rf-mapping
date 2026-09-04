@@ -21,25 +21,22 @@ function trialStructSave(trials, meta, savename, tag, iftest)
 %                 produced this data?" is always answerable from the
 %                 .mat file itself
 %           Savename, stimulus name
-%           tag, a tag that should match the tag of given by DAQ controller
+%           tag, mouse id
 %           iftest, appends '_test' to filename if == 1
 %
 %           Note: user must supply a tag number. The visual stimulation PC
 %           has no access to this number. There is a builtin check in this
 %           function to ensure the user does not overwrite pre-existing
 %           trialstruct files
-%%%%%%%%%%%%%%%%%%%%%%%%%%% DEFAULTS FOR TESTING %%%%%%%%%%%%%%%%%%%%%%%%%%%
-%trials = [ 1 2 3];
-%meta = struct();
-%user = 'MSC';
-%tag = 'test_1';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
 % Load dirInformation file containing the DAQPC raw data file address
 dirInformation;
-% Get the current time
-nowTime = datetime('now', 'Format', 'yyyyMMdd');
-%get only date portion of the time, formatted YYYYMMDD (zero-padded, no separators)
+% Get the current date and time
+nowTime = datetime('now', 'Format', 'yyyyMMdd_HHmmss');
 date = char(nowTime);
+
 % Get the user specified save locations from dirInformation
 saveDir = dirInfo.DaqPCDataLoc;
 % This location specified in RigSpecific dirInfo is the backup save
