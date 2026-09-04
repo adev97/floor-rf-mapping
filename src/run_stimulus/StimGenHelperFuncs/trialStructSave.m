@@ -12,18 +12,17 @@
 %you should have received a copy of the gnu general public license
 %along with this program.  if not, see <http://www.gnu.org/licenses/>.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-function trialStructSave(trials, meta, user, tag)
-%This function is called by the StimGen gui and saves the trials structure
-%for a stimuli executed by the gui. It creates a filename that matches the
-%Scanziani Lab filenaming convention 'yyyy_MM_DD-User-Tags'
+function trialStructSave(trials, meta, savename, tag, iftest)
+
 % INPUTS:   Trials, a trial structure
 %           Meta, a struct capturing rig/session/git info for this run
 %                 (e.g. monitorInfo, mouseID, experimenter, tag, git
 %                 commit hash) -- saved alongside trials so "what
 %                 produced this data?" is always answerable from the
 %                 .mat file itself
-%           User, user initials provided by the StimGen gui
+%           Savename, stimulus name
 %           tag, a tag that should match the tag of given by DAQ controller
+%           iftest, appends '_test' to filename if == 1
 %
 %           Note: user must supply a tag number. The visual stimulation PC
 %           has no access to this number. There is a builtin check in this
@@ -50,8 +49,16 @@ saveDir = dirInfo.DaqPCDataLoc;
 s=dir(saveDir);
 % Get the names from these structures
 names={s(:).name};
-%create our target filename -- ORDER: date_user_tag
-target= [date, '_', user,'_', tag,'.mat'];
+%create our target filename -- ORDER: date_savename_tag
+
+if iftest == 1
+    test = '_test';
+    target= [date, '_', savename,'_', tag,test,'.mat'];
+
+elseif iftest == 0
+    target= [date, '_', savename,'_', tag,'.mat'];
+end
+
 % determine if filename already exist and ask before overwrite
 if any(strcmp(target,names))
     answer = questdlg('The file already exist; OVERWRITE?',...
