@@ -13,7 +13,7 @@ monitorInfo.screenNumber = 1;
 monitorInfo.screenDistcm = 3; % distance of eyes from screen
 monitorInfo.screenSizecmX = 54.5; % height of monitor
 monitorInfo.screenSizecmY = 30.2; % width of monitor
-monitorInfo.mouseOffsetXcm = 24.5; % x/y location of the mouse head on the screen
+monitorInfo.mouseOffsetXcm = 24; % x/y location of the mouse head on the screen, measured from left
 monitorInfo.mouseOffsetYcm = 15;
 monitorInfo.screenSizeDegX = 2*atan(monitorInfo.screenSizecmX/2/...
                                 monitorInfo.screenDistcm)*180/pi;

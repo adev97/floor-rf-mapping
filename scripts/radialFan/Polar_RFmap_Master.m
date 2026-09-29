@@ -14,7 +14,7 @@ monitorInfo = getMonitorInformation();
 % so Luminance is the fastest-varying parameter. trialStruct_RFmapFast's
 % randomization for stimType 'Receptive Field Mapping' relies on that
 % ordering to avoid two consecutive trials landing on the same sector.
-
+tic
 table = {'Sector Azimuth (deg)', -120, 10, 110;...
     'Sector Eccentricity (deg)', 30, 10, 70;...
     'Sector Luminance (binary)', 0, 1, 1;...
@@ -22,7 +22,7 @@ table = {'Sector Azimuth (deg)', -120, 10, 110;...
     'Blank', 0, [], [];...
     'Randomize', 1, [], [];...
     'Interleave', 0, [], [];...
-    'Repeats', 2, [], [];... % TESTING WITH TWO REPEATS, EXPERIMENT WILL HAVE 1 + 49 REPEATS
+    'Repeats', 49, [], [];... % TESTING WITH TWO REPEATS, EXPERIMENT WILL HAVE 1 + 49 REPEATS
     'Initialization Screen (s)', 5, [], []};
 
 stimType = 'Receptive Field Mapping';
@@ -44,7 +44,7 @@ meta.timestamp       = char(datetime(nowTime, 'Format', 'yyyy-MM-dd HH:mm:ss'));
 meta.matlabVersion   = version;
 
 displayPolarSectorRFMap(trials);
-
+toc
 savename = 'Polar_RFmap';
 trialStructSave(trials, meta, savename, tag, iftest);
 end
